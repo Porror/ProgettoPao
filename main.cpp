@@ -1,0 +1,21 @@
+#include "mainwindow.h"
+
+#include <QApplication>
+#include "mainwinwind.h"
+#include "windsensor.h"
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    QMainWindow w;
+
+    WindSensor wind("Sensore 1");
+    wind.simulate(15);
+    std::vector<double> v{5,8,4,6};
+    MainWinWind sensore;
+    sensore.updateVal(&wind);
+    w.setCentralWidget(&sensore);
+    w.show();
+    return a.exec();
+    return 0;
+}
