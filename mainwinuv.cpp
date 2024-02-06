@@ -1,12 +1,10 @@
 #include "mainwinuv.h"
 
-#include <QXYSeries>
-#include <QSplineSeries>
 #include "Sensor.h"
 
 MainWinUv::MainWinUv(): graficow(new QChartView){
-    doGraph();
     mainlayout->addWidget(graficow);
+    graficow->chart()->legend()->setVisible(false);
 }
 
 void MainWinUv::updateVal(const Sensor* sensore){
@@ -18,12 +16,17 @@ void MainWinUv::updateVal(const Sensor* sensore){
 void MainWinUv::doGraph(){
     QChart* grafico=graficow->chart();
     grafico->removeAllSeries();
+    for(auto ax:grafico->axes()) grafico->removeAxis(ax);
     //Gestione degli assi
     QValueAxis * assex = new QValueAxis;
+    assex->setTitleText("Indici simulazione");
+    assex->setTickCount(10);
     assex->setRange(0,data.size()-1);
+
     assex->setLabelFormat("%d");
     QValueAxis * assey = new QValueAxis;
     assey->setTitleText("Valori misurati indice UV");
+    assey->setTickCount(10);
     {
         double min=data.front(), max=data.front();
         for(double d:data){
@@ -36,7 +39,7 @@ void MainWinUv::doGraph(){
     grafico->addAxis(assex,Qt::AlignBottom);
     grafico->addAxis(assey,Qt::AlignLeft);
     //Gestione del grafico vero e proprio
-    QSplineSeries * line=new QSplineSeries;
+    QLineSeries * line=new QLineSeries;
     for(unsigned int i=0;i<data.size();++i){
         line->append(i,data[i]);
     }

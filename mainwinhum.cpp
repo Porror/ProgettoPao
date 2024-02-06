@@ -1,10 +1,8 @@
 #include "mainwinhum.h"
 
-#include <QSplineSeries>
 #include "Sensor.h"
 
 MainWinHum::MainWinHum(): graficow(new QChartView){
-    doGraph();
     mainlayout->addWidget(graficow);
 }
 
@@ -19,6 +17,8 @@ void MainWinHum::doGraph(){
     grafico->removeAllSeries();
     //Gestione degli assi
     QValueAxis * assex = new QValueAxis;
+    assex->setTitleText("Indici simulazione");
+    assex->setTickCount(10);
     assex->setRange(0,data.size()-1);
     assex->setLabelFormat("%d");
     QValueAxis * assey = new QValueAxis;
@@ -35,7 +35,7 @@ void MainWinHum::doGraph(){
     grafico->addAxis(assex,Qt::AlignBottom);
     grafico->addAxis(assey,Qt::AlignLeft);
     //Gestione del grafico vero e proprio
-    QSplineSeries * line=new QSplineSeries;
+    QLineSeries * line=new QLineSeries;
     for(unsigned int i=0;i<data.size();++i){
         line->append(i,data[i]);
     }

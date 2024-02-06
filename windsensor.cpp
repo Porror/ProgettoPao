@@ -1,7 +1,10 @@
 #include "windsensor.h"
 #include "error.h"
 #include <random>
+#include <time.h>
 
+//Da rimuovere
+#include <iostream>
 
 unsigned int WindSensor::maxangle=364;
 unsigned int WindSensor::minangle=0;
@@ -24,11 +27,6 @@ void WindSensor::simulate(unsigned int iterazioni){
     catch(Error e){
         throw Error(e);
     }
-
-    if(!directions.empty()) directions.clear();
-
-
-
     for(unsigned int i=0;i<data.size();++i){
         if(data[i]>=int(data[i])) data[i]=int(data[i]+1);
         else data[i]=int(data[i]);
@@ -40,14 +38,11 @@ void WindSensor::simulate(unsigned int iterazioni){
     std::mt19937 gen(rd());
 
     if(simulationType != modelli{costante}){
-        double mean=(maxangle+minangle)/2;
-        double stddev=(maxangle-minangle)/6;
-        std::uniform_int_distribution<int> distribution(mean,stddev);
-        for(unsigned int i=0;i<iterazioni;++i){directions.push_back(distribution(gen));
+        srand(time(NULL));
+        for(unsigned int i=0;i<iterazioni;++i)directions.push_back((std::rand()%(maxangle-minangle))+minangle);
         return;
-        }
     }
-    else for(unsigned int i=0;i<iterazioni;++i) directions.push_back(0);
+    else{for(unsigned int i=0;i<iterazioni;++i)directions.push_back(180);}
 }
 
 std::vector<unsigned int> WindSensor::getWindDirections() const{

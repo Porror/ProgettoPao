@@ -1,9 +1,11 @@
 #include "mainwinwind.h"
 #include "windsensor.h"
 
+#include<iostream>
+
 MainWinWind::MainWinWind(): graficow(new QChartView){
-    doGraph();
     mainlayout->addWidget(graficow);
+    graficow->chart()->legend()->setVisible(false);
 }
 
 void MainWinWind::updateVal(const Sensor* sensore){
@@ -18,20 +20,20 @@ void MainWinWind::updateVal(const Sensor* sensore){
 }
 
 void MainWinWind::doGraph(){
-    QChart* grafico=new QChart;
+    QChart* grafico=graficow->chart();
+    for(auto ax:grafico->axes()) grafico->removeAxis(ax);
     grafico->setTitle("Grafico intensità e direzione del vento (angolo rispetto al nord)");
-
     //Gestione degli assi
     QValueAxis *assex=new QValueAxis,*assey=new QValueAxis, *asseydir=new QValueAxis;
     assex->setTitleText("Indici simulazione");
     assex->setTickCount(10);
-    assex->setRange(0,data.size()-1);
+    assex->setRange(-1,data.size());
     assex->setLabelFormat("%d");
 
     assey->setTitleText("Valori intensità del vento");
     assey->setTickCount(10);
     {
-        double min=data.front(), max=data.front();
+        double min=data.front(),max=data.front();
         for(double d:data){
             if(d<min) min=d;
             if(d>max) max=d;
@@ -43,14 +45,7 @@ void MainWinWind::doGraph(){
 
     asseydir->setTitleText("Valori intensità del vento");
     asseydir->setTickCount(10);
-    {
-        double min=winddri.front(), max=winddri.front();
-        for(unsigned int d:winddri){
-            if(d<min) min=d;
-            if(d>max) max=d;
-        }
-        asseydir->setRange(min-1,max+1);
-    }
+    asseydir->setRange(-1,365);
     asseydir->setLabelFormat("%d");
     asseydir->setLinePen(QPen(Qt::blue));
 
@@ -59,25 +54,27 @@ void MainWinWind::doGraph(){
     grafico->addAxis(asseydir,Qt::AlignRight);
 
     //Gestione dei grafici
-    QSplineSeries * intline=new QSplineSeries(grafico);
+    QLineSeries * intline=new QLineSeries(grafico);
     for(unsigned int i=0;i<data.size();++i){
         intline->append(i,data[i]);
     }
     intline->setColor(Qt::green);
 
-    QSplineSeries * dirline=new QSplineSeries(grafico);
+    QLineSeries * dirline=new QLineSeries(grafico);
     for(unsigned int i=0;i<winddri.size();++i){
         dirline->append(i,data[i]);
     }
     dirline->setColor(Qt::blue);
 
     grafico->addSeries(intline);
+    grafico->addSeries(dirline);
+
     intline->attachAxis(assex);
     intline->attachAxis(assey);
 
-    grafico->addSeries(dirline);
     dirline->attachAxis(assex);
     dirline->attachAxis(asseydir);
 
     graficow->setChart(grafico);
+    graficow->update();
 }
