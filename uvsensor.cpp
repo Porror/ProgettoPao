@@ -30,11 +30,3 @@ void UVSensor::simulate(unsigned int iterations){
 void UVSensor::save(Saver*sav)const{
     sav->saveUVSensor(*this);
 }
-
-void UVSensor::setMin(const double& m){
-    if(m==int(m) && m>=minscale && m<=maxscale) min=m;
-}
-
-void UVSensor::setMax(const double& m){
-    if(m==int(m) && m>=minscale && m<=maxscale) min=m;
-}

@@ -21,6 +21,10 @@ SOURCES += \
     mainwinhum.cpp \
     mainwinuv.cpp \
     mainwinwind.cpp \
+    sensorlisthum.cpp \
+    sensorlistobj.cpp \
+    sensorlistuv.cpp \
+    sensorlistwind.cpp \
     uvsensor.cpp \
     windsensor.cpp
 
@@ -37,6 +41,10 @@ HEADERS += \
     mainwinhum.h \
     mainwinuv.h \
     mainwinwind.h \
+    sensorlisthum.h \
+    sensorlistobj.h \
+    sensorlistuv.h \
+    sensorlistwind.h \
     uvsensor.h \
     windsensor.h
 

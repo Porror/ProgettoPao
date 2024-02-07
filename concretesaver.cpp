@@ -12,9 +12,6 @@
 #include "error.h"
 
 
-
-#include<iostream>
-
 enum SensorString{uvSensor,humiditySensor,windSensor};
 
 ConcreteSaver::ConcreteSaver(const std::string& saddress,const std::string& laddress)
@@ -97,6 +94,8 @@ void ConcreteSaver::saveUVSensor(const UVSensor& sen){
     oggetto["simType"]=sen.getSimulator();
     oggetto["name"]=QString::fromStdString(sen.getName());
     oggetto["type"]=SensorString{uvSensor};
+    oggetto["min"]=sen.getMin();
+    oggetto["max"]=sen.getMax();
     data.append(oggetto);
 }
 void ConcreteSaver::saveHumiditysensor(const HumiditySensor& sen){
@@ -110,6 +109,8 @@ void ConcreteSaver::saveHumiditysensor(const HumiditySensor& sen){
     oggetto["simType"]=sen.getSimulator();
     oggetto["name"]=QString::fromStdString(sen.getName());
     oggetto["type"]=SensorString{humiditySensor};
+    oggetto["min"]=sen.getMin();
+    oggetto["max"]=sen.getMax();
     data.append(oggetto);
 }
 void ConcreteSaver::saveWindSensor(const WindSensor& sen){
@@ -131,6 +132,8 @@ void ConcreteSaver::saveWindSensor(const WindSensor& sen){
     oggetto["simType"]=sen.getSimulator();
     oggetto["name"]=QString::fromStdString(sen.getName());
     oggetto["type"]=SensorString{windSensor};
+    oggetto["min"]=sen.getMin();
+    oggetto["max"]=sen.getMax();
     data.append(oggetto);
 }
 
@@ -147,6 +150,8 @@ void ConcreteSaver::loadUVSensor(std::list<Sensor*>& ret,QJsonObject& obj)const{
 
     for(auto it=data.begin();it<data.end();++it) val.push_back(it->toDouble());
     sen->data=val;
+    sen->setMin(obj.take("min").toDouble());
+    sen->setMax(obj.take("max").toDouble());
 }
 
 void ConcreteSaver::loadHumiditySensor(std::list<Sensor*>& ret,QJsonObject& obj)const{
@@ -161,6 +166,8 @@ void ConcreteSaver::loadHumiditySensor(std::list<Sensor*>& ret,QJsonObject& obj)
     std::vector<double> val;
     for(auto it=data.begin();it<data.end();++it) val.push_back(it->toDouble());
     sen->data=val;
+    sen->setMin(obj.take("min").toDouble());
+    sen->setMax(obj.take("max").toDouble());
 }
 
 void ConcreteSaver::loadWindSensor(std::list<Sensor*>& ret,QJsonObject& obj)const{
@@ -181,4 +188,6 @@ void ConcreteSaver::loadWindSensor(std::list<Sensor*>& ret,QJsonObject& obj)cons
     }
     sen->data=val;
     sen->directions=dir;
+    sen->setMin(obj.take("min").toDouble());
+    sen->setMax(obj.take("max").toDouble());
 }
