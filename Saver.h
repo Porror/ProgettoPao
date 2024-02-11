@@ -17,6 +17,9 @@ private:
     friend class HumiditySensor;
     friend class UVSensor;
     friend class WindSensor;
+
+public:
+    virtual ~Saver()=0;
 };
 
 #endif // SAVER_H

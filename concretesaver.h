@@ -30,6 +30,7 @@ public:
     void setlAddress(const std::string&);
     std::string getsAddress() const;
     std::string getlAddress() const;
+    ~ConcreteSaver()override;
 };
 
 #endif // CONCRETESAVER_H

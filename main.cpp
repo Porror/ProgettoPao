@@ -1,16 +1,15 @@
-#include "mainwindow.h"
-
 #include <QApplication>
-#include "sensorlistuv.h"
+#include <QInputDialog>
+#include <QDebug>
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    QMainWindow w;
 
-    SensorListUV sensore("Provolone");
-    sensore.show();
+#include <QtWidgets>
+#include "controller.h"
 
-    return a.exec();
-    return 0;
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+    MainWindow *w =new MainWindow();
+    controller c(new ConcreteSaver(),w);
+    w->show();
+    return app.exec();
 }

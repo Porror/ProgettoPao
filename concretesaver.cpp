@@ -17,6 +17,8 @@ enum SensorString{uvSensor,humiditySensor,windSensor};
 ConcreteSaver::ConcreteSaver(const std::string& saddress,const std::string& laddress)
     :saveAddress(saddress),loadAdderss(laddress){}
 
+ConcreteSaver::~ConcreteSaver(){}
+
 void ConcreteSaver::save(const std::string& addr)const{
     std::string effAddr= addr==""?saveAddress:addr;
     if(effAddr=="")throw Error(1);
@@ -150,6 +152,7 @@ void ConcreteSaver::loadUVSensor(std::list<Sensor*>& ret,QJsonObject& obj)const{
 
     for(auto it=data.begin();it<data.end();++it) val.push_back(it->toDouble());
     sen->data=val;
+    //non restituisce errori in quanto min e max di default sono a fondoscala
     sen->setMin(obj.take("min").toDouble());
     sen->setMax(obj.take("max").toDouble());
 }
@@ -188,6 +191,7 @@ void ConcreteSaver::loadWindSensor(std::list<Sensor*>& ret,QJsonObject& obj)cons
     }
     sen->data=val;
     sen->directions=dir;
-    sen->setMin(obj.take("min").toDouble());
+    //sempre possibile in quanto l'unico vincolo esiste su min>0
     sen->setMax(obj.take("max").toDouble());
+    sen->setMin(obj.take("min").toDouble());
 }

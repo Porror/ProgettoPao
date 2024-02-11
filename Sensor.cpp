@@ -14,6 +14,14 @@ void Sensor::setMax(const double& m){
     max=m;
 }
 
+double Sensor::getMin()const{
+    return min;
+}
+
+double Sensor::getMax()const{
+    return max;
+}
+
 std::string Sensor::getName() const{
     return name;
 }
@@ -26,7 +34,7 @@ modelli Sensor::getSimulator() const{
     return simulationType;
 }
 
-double Sensor::getMin() const{
+double Sensor::getMinsim() const{
     if(data.empty()) throw Error(0);
 
     double ret=data[0];
@@ -36,7 +44,7 @@ double Sensor::getMin() const{
     return ret;
 }
 
-double Sensor::getMax() const{
+double Sensor::getMaxsim() const{
     if(data.empty()) throw Error(0);
 
     double ret=data[0];

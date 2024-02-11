@@ -10,6 +10,7 @@ public:
 public:
     Error(const unsigned int&);
     std::string correspondingString() const;
+    int getCode()const;
 };
 
 #endif // ERROR_H

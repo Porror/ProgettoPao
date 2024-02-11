@@ -7,6 +7,8 @@ class WindSensor: public Sensor
 {
     friend class ConcreteSaver;
 private:
+    static const int minscale=0;
+    static const int maxscale=100;
     std::vector<unsigned int> directions;
     static unsigned int maxangle;
     static unsigned int minangle;

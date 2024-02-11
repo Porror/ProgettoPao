@@ -3,15 +3,12 @@
 #include <random>
 #include <time.h>
 
-//Da rimuovere
-#include <iostream>
-
 unsigned int WindSensor::maxangle=364;
 unsigned int WindSensor::minangle=0;
 
 WindSensor::WindSensor(const std::string& nome,const modelli& mod):Sensor(nome,mod){
-    min=0;
-    max=100;
+    min=minscale;
+    max=maxscale;
 }
 
 WindSensor::~WindSensor(){}
@@ -19,7 +16,7 @@ WindSensor::~WindSensor(){}
 void WindSensor::simulate(unsigned int iterazioni){
 
     if(min!=int(min) && max!=int(max)) throw Error(1);
-    if(min<0) throw Error(2);
+    if(min<minscale) throw Error(2);
 
     try{
         Sensor::simulate(iterazioni);

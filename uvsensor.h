@@ -15,6 +15,8 @@ public:
     //Dipende dalla posizione geografica e dalle condizioni atmosferiche, nelle nostre zone questa è una scala ragionevole
     void simulate(unsigned int) override;
     void save(Saver*)const override;
+    void setMin(const double& min)override;
+    void setMax(const double& min)override;
 };
 
 #endif // UVSENSOR_H

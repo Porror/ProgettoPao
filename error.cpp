@@ -11,3 +11,7 @@ std::string Error::correspondingString()const{
 
     return "Errore non riconosciuto";
 }
+
+int Error::getCode()const{
+    return code;
+}
