@@ -1,7 +1,6 @@
 #include "mainwinwind.h"
 #include "windsensor.h"
 
-#include<iostream>
 
 MainWinWind::MainWinWind(): graficow(new QChartView){
     mainlayout->addWidget(graficow);
@@ -9,18 +8,17 @@ MainWinWind::MainWinWind(): graficow(new QChartView){
 }
 
 void MainWinWind::updateVal(const Sensor* sensore){
-    //TODO connettere al controller
     data=sensore->getData();
     if(dynamic_cast<const WindSensor*>(sensore)){
         const WindSensor* temp=dynamic_cast<const WindSensor*>(sensore);
         winddri=temp->getWindDirections();
     }
-    doGraph();
-    graficow->update();
+    if(!data.empty())doGraph();
 }
 
 void MainWinWind::doGraph(){
     QChart* grafico=graficow->chart();
+    grafico->removeAllSeries();
     for(auto ax:grafico->axes()) grafico->removeAxis(ax);
     grafico->setTitle("Grafico intensità e direzione del vento (angolo rispetto al nord)");
     //Gestione degli assi
@@ -30,7 +28,7 @@ void MainWinWind::doGraph(){
     assex->setRange(-1,data.size());
     assex->setLabelFormat("%d");
 
-    assey->setTitleText("Valori intensità del vento");
+    assey->setTitleText("Intensità del vento");
     assey->setTickCount(10);
     {
         double min=data.front(),max=data.front();
@@ -43,7 +41,7 @@ void MainWinWind::doGraph(){
     assey->setLabelFormat("%d");
     assey->setLinePen(QPen(Qt::green));
 
-    asseydir->setTitleText("Valori intensità del vento");
+    asseydir->setTitleText("Direzione del Vento (espressa in gradi)");
     asseydir->setTickCount(10);
     asseydir->setRange(-1,365);
     asseydir->setLabelFormat("%d");

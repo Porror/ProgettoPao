@@ -36,5 +36,13 @@ void HumiditySensor::setMin(const double& m){
 }
 
 void HumiditySensor::setMax(const double& m){
-    if(m==int(m) && m>=minscale && m<=maxscale) min=m;
+    if(m==int(m) && m>=minscale && m<=maxscale) max=m;
+}
+
+double HumiditySensor::getMinscale(){
+    return minscale;
+}
+
+double HumiditySensor::getMaxscale(){
+    return maxscale;
 }

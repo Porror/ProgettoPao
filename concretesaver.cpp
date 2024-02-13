@@ -142,6 +142,8 @@ void ConcreteSaver::saveWindSensor(const WindSensor& sen){
 void ConcreteSaver::loadUVSensor(std::list<Sensor*>& ret,QJsonObject& obj)const{
     Sensor* sen=new UVSensor(obj.take("name").toString().toStdString());
     ret.push_front(sen);
+    sen->setMin(obj.take("min").toDouble());
+    sen->setMax(obj.take("max").toDouble());
     int a=obj.take("simType").toInt();
     if(a==modelli{normale}) sen->setSimulationType(modelli{normale});
     else if(a==modelli{uniforme}) sen->setSimulationType(modelli{uniforme});
@@ -152,14 +154,13 @@ void ConcreteSaver::loadUVSensor(std::list<Sensor*>& ret,QJsonObject& obj)const{
 
     for(auto it=data.begin();it<data.end();++it) val.push_back(it->toDouble());
     sen->data=val;
-    //non restituisce errori in quanto min e max di default sono a fondoscala
-    sen->setMin(obj.take("min").toDouble());
-    sen->setMax(obj.take("max").toDouble());
 }
 
 void ConcreteSaver::loadHumiditySensor(std::list<Sensor*>& ret,QJsonObject& obj)const{
     Sensor* sen=new HumiditySensor(obj.take("name").toString().toStdString());
     ret.push_front(sen);
+    sen->setMin(obj.take("min").toDouble());
+    sen->setMax(obj.take("max").toDouble());
     int a=obj.take("simType").toInt();
     if(a==modelli{normale}) sen->setSimulationType(modelli{normale});
     else if(a==modelli{uniforme}) sen->setSimulationType(modelli{uniforme});
@@ -169,13 +170,13 @@ void ConcreteSaver::loadHumiditySensor(std::list<Sensor*>& ret,QJsonObject& obj)
     std::vector<double> val;
     for(auto it=data.begin();it<data.end();++it) val.push_back(it->toDouble());
     sen->data=val;
-    sen->setMin(obj.take("min").toDouble());
-    sen->setMax(obj.take("max").toDouble());
 }
 
 void ConcreteSaver::loadWindSensor(std::list<Sensor*>& ret,QJsonObject& obj)const{
     WindSensor* sen=new WindSensor(obj.take("name").toString().toStdString());
     ret.push_front(sen);
+    sen->setMin(obj.take("min").toDouble());
+    sen->setMax(obj.take("max").toDouble());
     int a=obj.take("simType").toInt();
     if(a==modelli{normale}) sen->setSimulationType(modelli{normale});
     else if(a==modelli{uniforme}) sen->setSimulationType(modelli{uniforme});
@@ -191,7 +192,4 @@ void ConcreteSaver::loadWindSensor(std::list<Sensor*>& ret,QJsonObject& obj)cons
     }
     sen->data=val;
     sen->directions=dir;
-    //sempre possibile in quanto l'unico vincolo esiste su min>0
-    sen->setMax(obj.take("max").toDouble());
-    sen->setMin(obj.take("min").toDouble());
 }

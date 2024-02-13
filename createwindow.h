@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLineEdit>
+#include <QLabel>
 #include <QComboBox>
 #include "Sensor.h"
 
@@ -16,11 +17,14 @@ private:
     QLineEdit* nameEdit;
     QComboBox* modelloSelector;
 
+    QLabel* minimo;//Serve per specificare il range possibile in caso di modifica o creazione sensore
+
     QComboBox* sensorSelector;
 public:
     createwindow(Sensor* s=nullptr,QWidget* parent=nullptr);
     ~createwindow();
 private slots:
+    void modificarange(int);
     void collegaModifica();
     void collegaCrea();
 signals:

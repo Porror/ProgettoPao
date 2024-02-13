@@ -5,7 +5,7 @@
 
 class Error
 {
-public:
+private:
     unsigned int code;
 public:
     Error(const unsigned int&);

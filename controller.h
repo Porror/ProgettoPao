@@ -16,17 +16,15 @@ private:
     MainWindow* window;
     std::vector<std::pair<Sensor*,std::list<Observer*>>> sensors;
 
-    void updateName(const std::string&,std::list<Observer*>);
-    void updateVal(std::list<Observer*>,Sensor*) const;
+    void updateName(const std::string&,std::list<Observer*>);//chiama il metodo Updatename per tutti gli observer di un sensor
+    void updateVal(std::list<Observer*>,Sensor*) const;//chiama il metodo Updateval per tutti gli observer di un sensor
 
-    void attach(Observer*,Sensor*);//collega Observer a corrispettivo Sensor tramite attachdir
-    void attachdir(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator,const Observer*);
-    void detach(Observer*,Sensor*);//rimuove un observer dal sensore tramite detachdir
-    void detachdir(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator,const Observer*);
+    void attach(Observer*,Sensor*);//collega Observer a corrispettivo Sensor
+    void detach(Observer*,Sensor*);//rimuove un observer dal sensore
 
-    void savedialog();//crea la QDialog di salvataggio e chiama save()
+    void save();//effettua il salvataggio effettivo, di supporto per savedialog()
+    void load();//effettua il caricamento dei dati
     void modifydialog(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator);// crea la QDialog di modifica sensore e effettua la modifica
-    void loaddialog();//crea la QDialog di caricamento e chiana loa()
 
     std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator getiterator(const Sensor*);
     std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator getiterator(const Observer*);
@@ -38,13 +36,14 @@ public:
     controller(ConcreteSaver*,MainWindow*,QWidget* parent=nullptr);
     ~controller();
 public slots:
-    void save();//effettua il salvataggio effettivo, di supporto per savedialog()
-    void load();//effettua il caricamento dei dati
-    void modify(Sensor*,QString,int,int,modelli mod);
+    void savedialog();//crea la QDialog di salvataggio e chiama save()
+    void loaddialog();//crea la QDialog di caricamento e chiana loa()
+    void modify(Sensor*,QString,int,int,modelli mod);//esegue la modifica di un dato sensore
     void modificaselezionato();//modifica il sensore nella mainwindow
     void eliminaselezionato();//elimina il sensore nella mainwindow
-    void dclwork(Observer*); //Connessione da fare a DC su item lista Sensori
-    void aggiungiSensore(QString,int,int,int,modelli mod);//effettua l'aggiunta
+    void simulaselezionato(unsigned int);//simula il sensore selezionato
+    void dclwork(Observer*); //connessione clic bottone mostra
+    void aggiungiSensore(QString,int,int,int,modelli);//effettua l'aggiunta
 private slots:
     void newSensor();//crea la dialog di aggiunta sensore e la connette a aggiungiSensore
 };

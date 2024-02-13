@@ -10,7 +10,7 @@ MainWinUv::MainWinUv(): graficow(new QChartView){
 void MainWinUv::updateVal(const Sensor* sensore){
     //TODO connettere al controller
     data=sensore->getData();
-    doGraph();
+    if(!data.empty())doGraph();
 }
 
 void MainWinUv::doGraph(){

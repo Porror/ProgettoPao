@@ -5,7 +5,8 @@
 SensorListObj::SensorListObj(const QString& str,QWidget *parent):
     QWidget{parent},icon(new QIcon()),iconlabel(new QLabel(this)),nome(new QLabel(str,this)),updButton(new QPushButton("mostra",this)){
 
-    update();
+    setMinimumSize(150,80);
+    setMaximumSize(200,100);
 
     QGridLayout* layout=new QGridLayout(this);
     layout->addWidget(iconlabel,0,0);
@@ -14,6 +15,7 @@ SensorListObj::SensorListObj(const QString& str,QWidget *parent):
 
     this->setLayout(layout);
     connect(updButton,SIGNAL(clicked(bool)),this,SLOT(emissione()));
+    update();
 }
 
 SensorListObj::~SensorListObj(){}

@@ -4,17 +4,19 @@
 
 MainWinHum::MainWinHum(): graficow(new QChartView){
     mainlayout->addWidget(graficow);
+    graficow->chart()->legend()->setVisible(false);
 }
 
 void MainWinHum::updateVal(const Sensor* sensore){
     //TODO connettere al controller
     data=sensore->getData();
-    doGraph();
+    if(!data.empty())doGraph();//evito errori in caso di mancanza di dati
 }
 
 void MainWinHum::doGraph(){
     QChart* grafico=graficow->chart();
     grafico->removeAllSeries();
+    for(auto ax:grafico->axes()) grafico->removeAxis(ax);
     //Gestione degli assi
     QValueAxis * assex = new QValueAxis;
     assex->setTitleText("Indici simulazione");

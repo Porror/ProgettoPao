@@ -55,6 +55,13 @@ void WindSensor::setMin(const double& m){
 }
 
 void WindSensor::setMax(const double& m){
-    if(m==int(m) && m>=0) min=m;
+    if(m==int(m) && m>=0) max=m;
 }
 
+double WindSensor::getMinscale(){
+    return minscale;
+}
+
+double WindSensor::getMaxscale(){
+    return maxscale;
+}

@@ -2,12 +2,16 @@
 
 #include <QLineEdit>
 #include <QMenuBar>
+#include <QScrollArea>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent),sensori({}),mainlayout(new QHBoxLayout),leftlayout(new QVBoxLayout),sensorsScrollArea(new QScrollArea(this)),
-    sensorsLayout(new QVBoxLayout(this)),sensor(nullptr),saveAction(new QAction("Salva", this)),loadAction(new QAction("Carica",this)),
-    modificaAction(new QAction("Modifica",this)),eliminaAction(new QAction("Elimina",this)),newSensorAction(new QAction("Nuovo",this))
+    : QMainWindow(parent),sensori({}),mainlayout(new QHBoxLayout),leftlayout(new QVBoxLayout),
+    sensorsLayout(new QVBoxLayout()),sensor(nullptr),saveAction(new QAction("Salva", this)),
+    loadAction(new QAction("Carica",this)),modificaAction(new QAction("Modifica",this)),eliminaAction(new QAction("Elimina",this)),newSensorAction(new QAction("Nuovo",this))
 {
+    this->setWindowIcon(QIcon("../assets/icons/logo.PNG"));
+    this->setIconSize(QSize(80,80));
+    this->setWindowTitle("Sensor simulator");
     QWidget* mainwidget=new QWidget; //permette di inserire un layout nalla mainwindow, non è possibile altrimenti
     this->setCentralWidget(mainwidget);
     mainlayout->setObjectName("mainlayout");
@@ -27,9 +31,14 @@ MainWindow::MainWindow(QWidget *parent)
     ricerca->setMaximumSize(200,20);
 
     //layout scheda sensori sinistra
+    QScrollArea* sensorsScrollArea = new QScrollArea(this);
+    leftlayout->addWidget(sensorsScrollArea);
     sensorsScrollArea->setMinimumWidth(100);
     sensorsScrollArea->setMaximumWidth(200);
-    leftlayout->addWidget(sensorsScrollArea);
+    sensorsScrollArea->setWidgetResizable(true);
+    QWidget* scrollWidget=new QWidget(sensorsScrollArea);
+    sensorsScrollArea->setWidget(scrollWidget);
+    scrollWidget->setLayout(sensorsLayout);
 
     //creazione menù
     QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
@@ -62,18 +71,12 @@ void MainWindow::addsensor(SensorListObj*sen){
         sensori.push_back(sen);
     }
     else sensori.push_back(sen);
-    sensorsScrollArea->setLayout(sensorsLayout);
     sensorsLayout->addWidget(sen);
-    qDebug()<<"sensore aggiunto alla coda?\n";
-
 }
 
 void MainWindow::removesensor(SensorListObj* sen){
-    for(auto i=sensori.begin();i<sensori.end();++i){
-        if(*i==sen){
-            delete *i;
-            sensori.erase(i);
-        }
+    for(std::list<SensorListObj*>::iterator i=sensori.begin();i!=sensori.end();++i){
+        if(*i==sen)sensori.erase(i);
     }
     sensorsLayout->removeWidget(sen);
     sensorsLayout->update();
@@ -83,5 +86,6 @@ void MainWindow::addSensorMain(MainWindowSensor* sen){
     if(sensor==sen) return;
     delete sensor;
     sensor=sen;
+    sensor->update();
 }
 

@@ -37,5 +37,13 @@ void UVSensor::setMin(const double& m){
 }
 
 void UVSensor::setMax(const double& m){
-    if(m==int(m) && m>=minscale && m<=maxscale) min=m;
+    if(m==int(m) && m>=minscale && m<=maxscale) max=m;
+}
+
+double UVSensor::getMinscale(){
+    return minscale;
+}
+
+double UVSensor::getMaxscale(){
+    return maxscale;
 }

@@ -15,6 +15,8 @@ public:
     void save(Saver*)const override;
     void setMin(const double& min) override;
     void setMax(const double& min) override;
+    static double getMinscale();
+    static double getMaxscale();
 };
 
 #endif // HUMIDITYSENSOR_H
