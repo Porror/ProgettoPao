@@ -9,6 +9,7 @@ private:
     static const QString UVicon;
 public:
     SensorListUV(const QString&);
+    ~SensorListUV();
 };
 
 #endif // SENSORLISTUV_H

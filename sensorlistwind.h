@@ -9,6 +9,7 @@ private:
     static const QString Windicon;
 public:
     SensorListWind(const QString&);
+    ~SensorListWind();
 };
 
 #endif // SENSORLISTWIND_H

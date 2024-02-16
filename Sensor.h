@@ -11,7 +11,6 @@ class Sensor{
     friend class ConcreteSaver;
 private:
     std::string name;
-
 protected:
     modelli simulationType;
     std::vector<double> data;
@@ -20,12 +19,12 @@ protected:
     double max;
 public:
     void setName(const std::string&);
+    std::string getName() const;
     //indicano i valori massimi e minimi generabili dalla simulazione
     virtual void setMin(const double&);
     virtual void setMax(const double&);
     double getMin() const;
     double getMax() const;
-    std::string getName() const;
     virtual void setSimulationType(const modelli&);
     modelli getSimulator() const;
     virtual void save(Saver *) const =0;

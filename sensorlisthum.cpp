@@ -6,3 +6,5 @@ SensorListHum::SensorListHum(const QString& str):SensorListObj(str) {
     setIcon(Humicon);
     update();
 }
+
+SensorListHum::~SensorListHum(){};

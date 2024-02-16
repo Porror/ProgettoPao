@@ -9,6 +9,7 @@ private:
     static const QString Humicon;
 public:
     SensorListHum(const QString&);
+    ~SensorListHum();
 };
 
 #endif // SENSORLISTHUM_H

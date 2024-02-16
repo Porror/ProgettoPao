@@ -12,6 +12,7 @@ private:
     void doGraph();
 public:
     MainWinHum();
+    ~MainWinHum();
     void updateVal(const Sensor*)override;
 };
 

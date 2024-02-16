@@ -12,7 +12,7 @@
 #include "error.h"
 
 
-enum SensorString{uvSensor,humiditySensor,windSensor};
+enum SensorsType{uvSensor,humiditySensor,windSensor};
 
 ConcreteSaver::ConcreteSaver(const std::string& saddress,const std::string& laddress)
     :saveAddress(saddress),loadAdderss(laddress){}
@@ -60,11 +60,11 @@ std::list<Sensor*> ConcreteSaver::load(const std::string& addr)const{
 
             QJsonObject obj=sensori[i].toObject();
             if(obj.contains("type")){
-                if(obj.value("type").toInt()==SensorString{uvSensor})
+                if(obj.value("type").toInt()==SensorsType{uvSensor})
                     loadUVSensor(ret,obj);
-                else if(obj.value("type").toInt()==SensorString{humiditySensor})
+                else if(obj.value("type").toInt()==SensorsType{humiditySensor})
                     loadHumiditySensor(ret,obj);
-                else if(obj.value("type").toInt()==SensorString{windSensor})
+                else if(obj.value("type").toInt()==SensorsType{windSensor})
                     loadWindSensor(ret,obj);
             }
         }
@@ -95,7 +95,7 @@ void ConcreteSaver::saveUVSensor(const UVSensor& sen){
     oggetto["dati"]=JsonDati;
     oggetto["simType"]=sen.getSimulator();
     oggetto["name"]=QString::fromStdString(sen.getName());
-    oggetto["type"]=SensorString{uvSensor};
+    oggetto["type"]=SensorsType{uvSensor};
     oggetto["min"]=sen.getMin();
     oggetto["max"]=sen.getMax();
     data.append(oggetto);
@@ -110,7 +110,7 @@ void ConcreteSaver::saveHumiditysensor(const HumiditySensor& sen){
     oggetto["dati"]=JsonDati;
     oggetto["simType"]=sen.getSimulator();
     oggetto["name"]=QString::fromStdString(sen.getName());
-    oggetto["type"]=SensorString{humiditySensor};
+    oggetto["type"]=SensorsType{humiditySensor};
     oggetto["min"]=sen.getMin();
     oggetto["max"]=sen.getMax();
     data.append(oggetto);
@@ -133,7 +133,7 @@ void ConcreteSaver::saveWindSensor(const WindSensor& sen){
     oggetto["dati"]=JsonDati;
     oggetto["simType"]=sen.getSimulator();
     oggetto["name"]=QString::fromStdString(sen.getName());
-    oggetto["type"]=SensorString{windSensor};
+    oggetto["type"]=SensorsType{windSensor};
     oggetto["min"]=sen.getMin();
     oggetto["max"]=sen.getMax();
     data.append(oggetto);

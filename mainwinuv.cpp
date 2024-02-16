@@ -7,6 +7,8 @@ MainWinUv::MainWinUv(): graficow(new QChartView){
     graficow->chart()->legend()->setVisible(false);
 }
 
+MainWinUv::~MainWinUv(){}//la distruzione dei puntatori viene fatta da Qt
+
 void MainWinUv::updateVal(const Sensor* sensore){
     //TODO connettere al controller
     data=sensore->getData();

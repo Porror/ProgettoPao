@@ -7,6 +7,8 @@ MainWinHum::MainWinHum(): graficow(new QChartView){
     graficow->chart()->legend()->setVisible(false);
 }
 
+MainWinHum::~MainWinHum(){}//la distruzione dei puntatori viene fatta da Qt alla chiusura del widget
+
 void MainWinHum::updateVal(const Sensor* sensore){
     //TODO connettere al controller
     data=sensore->getData();

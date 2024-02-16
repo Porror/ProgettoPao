@@ -1,4 +1,4 @@
-#include "controller.h"
+#include "presenter.h"
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -20,7 +20,7 @@
 #include "mainwinhum.h"
 #include "mainwinwind.h"
 
-controller::controller(ConcreteSaver* sav,MainWindow* win,QWidget* parent):QWidget{parent}, s(sav),window(win){
+presenter::presenter(ConcreteSaver* sav,MainWindow* win,QWidget* parent):QWidget{parent}, s(sav),window(win){
 
     connect(window->saveAction,SIGNAL(triggered(bool)),this,SLOT(savedialog()));
     connect(window->loadAction,SIGNAL(triggered(bool)),this,SLOT(loaddialog()));
@@ -29,12 +29,12 @@ controller::controller(ConcreteSaver* sav,MainWindow* win,QWidget* parent):QWidg
     connect(window->newSensorAction,SIGNAL(triggered(bool)),this,SLOT(newSensor()));
 }
 
-controller::~controller(){
+presenter::~presenter(){
     delete s;
     delete window;
 }
 
-void controller::error(const QString& str){
+void presenter::error(const QString& str){
     QWidget* errore=new QWidget(nullptr);//Pagina da mostrare
     QVBoxLayout* layout=new QVBoxLayout(errore);//Layout pagina di errore
     errore->setWindowTitle("Errore");//Titolo della Pagina
@@ -51,21 +51,21 @@ void controller::error(const QString& str){
     errore->show();
 }
 
-std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator controller::getiterator(const Sensor* sen){
+std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator presenter::getiterator(const Sensor* sen){
     for(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator i=sensors.begin();i<sensors.end();++i){
         if(i->first==sen) return i;
     }
     return sensors.end();
 }
 
-std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator controller::getiterator(const Observer* obs){
+std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator presenter::getiterator(const Observer* obs){
     for(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator i=sensors.begin();i<sensors.end();++i){
         for(auto li:i->second) if(li==obs) return i;
     }
     return sensors.end();
 }
 
-void controller::save(){
+void presenter::save(){
     for(unsigned int i=0;i<sensors.size();++i){
         sensors[i].first->save(s);
     }
@@ -78,14 +78,14 @@ void controller::save(){
     catch(...){error("Errore sconosciuto");}
 }
 
-void controller::savedialog(){
+void presenter::savedialog(){
     QString fileName=QFileDialog::getSaveFileName(window,"File in cui desideri salvare i dati","../","Text Files (*.json);;All Files (*)");
     if(!fileName.endsWith(".json"))return;
     s->setsAddress(fileName.toStdString());
     save();
 }
 
-void controller::load(){
+void presenter::load(){
     std::list<Sensor*> listaObs;
     try{
     listaObs=s->load();
@@ -107,7 +107,7 @@ void controller::load(){
         else if(dynamic_cast<WindSensor*>(sen))
             listsen= new SensorListWind(QString::fromStdString(sen->getName()));
         else
-            error("Tipo di sensore non riconosciuto, aggiornare il controller");
+            error("Tipo di sensore non riconosciuto, aggiornare il presenter");
         if(listsen){
             window->addsensor(listsen);
             sensors.push_back(std::pair<Sensor*,std::list<Observer*>>{sen,{listsen}});
@@ -116,7 +116,7 @@ void controller::load(){
     }
 }
 
-void controller::dclwork(Observer* obs){
+void presenter::dclwork(Observer* obs){
     Sensor* sen=getiterator(obs)->first;
     attach(obs,sen);
     MainWindowSensor* newsensor=nullptr;
@@ -124,7 +124,7 @@ void controller::dclwork(Observer* obs){
     if(dynamic_cast<UVSensor*>(sen)) newsensor = new MainWinUv();
     else if(dynamic_cast<HumiditySensor*>(sen)) newsensor = new MainWinHum();
     else if(dynamic_cast<WindSensor*>(sen)) newsensor = new MainWinWind();
-    else error("Tipo di sensore non riconosciuto, aggiornare il controller");
+    else error("Tipo di sensore non riconosciuto, aggiornare il presenter");
 
     if(newsensor){
         newsensor->setName(QString::fromStdString(sen->getName()));
@@ -144,22 +144,22 @@ void controller::dclwork(Observer* obs){
     connect(window->sensor,SIGNAL(simulaPreuta(uint)),this,SLOT(simulaselezionato(uint)));
 }
 
-void controller::loaddialog(){
+void presenter::loaddialog(){
     QString filename=QFileDialog::getOpenFileName(window,"File da cui desideri importare i dati","../","Text Files (*.json)");
     s->setlAddress(filename.toStdString());
     load();
 }
 
-void controller::updateName(const std::string& nome,std::list<Observer*> observers){
+void presenter::updateName(const std::string& nome,std::list<Observer*> observers){
     for(Observer* observer:observers) observer->updateName(nome);
 }
 
-void controller::updateVal(std::list<Observer*> observers,Sensor* sensor) const{
+void presenter::updateVal(std::list<Observer*> observers,Sensor* sensor) const{
     for(Observer* observer:observers) observer->updateVal(sensor);
 }
 
 
-void controller::attach(Observer* obs,Sensor* sen){
+void presenter::attach(Observer* obs,Sensor* sen){
     //itera sulla lista di fino a Observer i per elementi vector, iter per elementi coda
     for(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator i=sensors.begin();i<sensors.end();++i){
         if(i->first==sen){
@@ -172,7 +172,7 @@ void controller::attach(Observer* obs,Sensor* sen){
     }
 }
 
-void controller::detach(Observer* obs,Sensor* sen){
+void presenter::detach(Observer* obs,Sensor* sen){
     //itera fino all'elemento obs nel vettore
     for(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator i=sensors.begin();i<sensors.end();++i){
         if(i->first==sen){
@@ -183,7 +183,7 @@ void controller::detach(Observer* obs,Sensor* sen){
 }
 
 
-void controller::remove(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator it){
+void presenter::remove(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator it){
     //Distruggo gli observer (se elimino il sensore tutti gli observer del sensore vanno eliminati)
     while(!it->second.empty()){
         delete it->second.front();
@@ -193,20 +193,20 @@ void controller::remove(std::vector<std::pair<Sensor*,std::list<Observer*>>>::it
     sensors.erase(it); //rimuovo l'elemento che conteneva il sensore
 }
 
-void controller::modifydialog(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator it){
+void presenter::modifydialog(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator it){
     createwindow* modificawindow=new createwindow(it->first);
     connect(modificawindow,SIGNAL(modifica(Sensor*,QString,int,int,modelli)),this,SLOT(modify(Sensor*,QString,int,int,modelli)));
     modificawindow->show();
 }
 
-void controller::modificaselezionato(){
+void presenter::modificaselezionato(){
     if(!window->sensor) error("seleziona un sensore per modificarlo");
     //proseguo sapendo che esiste un sensore attalmente selezionato
     else modifydialog(getiterator(window->sensor));
 }
 
 
-void controller::modify(Sensor* sen,QString nome,int min,int max,modelli mod){
+void presenter::modify(Sensor* sen,QString nome,int min,int max,modelli mod){
     try{
         auto it=getiterator(sen);
         if(it!=sensors.end()){
@@ -219,7 +219,7 @@ void controller::modify(Sensor* sen,QString nome,int min,int max,modelli mod){
     }catch(...){}
 }
 
-void controller::aggiungiSensore(QString nome ,int tipo,int min,int max,modelli mod){
+void presenter::aggiungiSensore(QString nome ,int tipo,int min,int max,modelli mod){
     SensorListObj* selliobj=nullptr;
     Sensor* sen=nullptr;
     if(tipo==0){ //UVSensor
@@ -237,36 +237,36 @@ void controller::aggiungiSensore(QString nome ,int tipo,int min,int max,modelli 
     sen->setMax(max);
     sen->setMin(min);
     window->addsensor(selliobj);
-    //aggiungo il sensore alla lista di sensori del controller
+    //aggiungo il sensore alla lista di sensori del presenter
     sensors.push_back(std::pair<Sensor*,std::list<Observer*>>{sen,std::list<Observer*>{selliobj}});
     connect(selliobj,SIGNAL(click(Observer*)),this,SLOT(dclwork(Observer*)));
     window->leftlayout->update();
 }
 
-void controller::eliminaselezionato(){
+void presenter::eliminaselezionato(){
     if(!window->sensor)return;
-    auto controllerit=getiterator(window->sensor);
-    while(controllerit->second.size()>0){
-        auto listit=controllerit->second.begin();
+    auto presenterit=getiterator(window->sensor);
+    while(presenterit->second.size()>0){
+        auto listit=presenterit->second.begin();
         if(dynamic_cast<SensorListObj*>(*listit))window->removesensor(dynamic_cast<SensorListObj*>(*listit));
         else if(*listit==window->sensor){
             window->mainlayout->removeWidget(window->sensor);
             window->sensor=nullptr;
         }
         delete *listit;
-        detach(*listit,controllerit->first);
+        detach(*listit,presenterit->first);
     }
-    delete controllerit->first;
-    sensors.erase(controllerit);
+    delete presenterit->first;
+    sensors.erase(presenterit);
 }
 
-void controller::newSensor(){
+void presenter::newSensor(){
     createwindow* w=new createwindow();
     w->show();
     connect(w,SIGNAL(crea(QString,int,int,int,modelli)),this,SLOT(aggiungiSensore(QString,int,int,int,modelli)));
 }
 
-void controller::simulaselezionato(unsigned int iterazioni){
+void presenter::simulaselezionato(unsigned int iterazioni){
     auto it=getiterator(window->sensor);
     it->first->simulate(iterazioni);
     for(auto i=it->second.begin();i!=it->second.end();++i){

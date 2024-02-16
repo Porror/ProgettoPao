@@ -13,7 +13,6 @@ SOURCES += \
     Saver.cpp \
     Sensor.cpp \
     concretesaver.cpp \
-    controller.cpp \
     createwindow.cpp \
     error.cpp \
     humiditysensor.cpp \
@@ -23,6 +22,7 @@ SOURCES += \
     mainwinhum.cpp \
     mainwinuv.cpp \
     mainwinwind.cpp \
+    presenter.cpp \
     sensorlisthum.cpp \
     sensorlistobj.cpp \
     sensorlistuv.cpp \
@@ -35,7 +35,6 @@ HEADERS += \
     Saver.h \
     Sensor.h \
     concretesaver.h \
-    controller.h \
     createwindow.h \
     error.h \
     humiditysensor.h \
@@ -44,6 +43,7 @@ HEADERS += \
     mainwinhum.h \
     mainwinuv.h \
     mainwinwind.h \
+    presenter.h \
     sensorlisthum.h \
     sensorlistobj.h \
     sensorlistuv.h \

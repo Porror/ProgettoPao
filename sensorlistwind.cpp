@@ -6,3 +6,5 @@ SensorListWind::SensorListWind(const QString& str):SensorListObj(str){
     setIcon(Windicon);
     update();
 }
+
+SensorListWind::~SensorListWind(){}

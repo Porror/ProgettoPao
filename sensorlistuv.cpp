@@ -6,3 +6,5 @@ SensorListUV::SensorListUV(const QString& str):SensorListObj(str){
     setIcon(UVicon);
     update();
 }
+
+SensorListUV::~SensorListUV(){}

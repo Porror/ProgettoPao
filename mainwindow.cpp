@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     sensorsLayout(new QVBoxLayout()),sensor(nullptr),saveAction(new QAction("Salva", this)),
     loadAction(new QAction("Carica",this)),modificaAction(new QAction("Modifica",this)),eliminaAction(new QAction("Elimina",this)),newSensorAction(new QAction("Nuovo",this))
 {
-    this->setWindowIcon(QIcon("../assets/icons/logo.PNG"));
+    this->setWindowIcon(QIcon("../assets/icons/logo.png"));
     this->setIconSize(QSize(80,80));
     this->setWindowTitle("Sensor simulator");
     QWidget* mainwidget=new QWidget; //permette di inserire un layout nalla mainwindow, non è possibile altrimenti
@@ -59,7 +59,7 @@ void MainWindow::search(const QString& nome){
     }
     else{
         for(auto s:sensori){
-            if(s->getName().contains(nome))s->show();
+            if(s->getName().toLower().contains(nome.toLower()))s->show();
             else s->hide();
         }
     }

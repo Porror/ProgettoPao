@@ -1,5 +1,5 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#ifndef PRESENTER_H
+#define PRESENTER_H
 
 #include "Sensor.h"
 #include <list>
@@ -8,7 +8,7 @@
 #include "concretesaver.h"
 #include "mainwindow.h"
 
-class controller:public QWidget
+class presenter:public QWidget
 {
     Q_OBJECT
 private:
@@ -33,8 +33,8 @@ private:
 
     void remove(std::vector<std::pair<Sensor*,std::list<Observer*>>>::iterator);//effettua l'eliminazione di un sensore
 public:
-    controller(ConcreteSaver*,MainWindow*,QWidget* parent=nullptr);
-    ~controller();
+    presenter(ConcreteSaver*,MainWindow*,QWidget* parent=nullptr);
+    ~presenter();
 public slots:
     void savedialog();//crea la QDialog di salvataggio e chiama save()
     void loaddialog();//crea la QDialog di caricamento e chiana loa()
@@ -48,4 +48,4 @@ private slots:
     void newSensor();//crea la dialog di aggiunta sensore e la connette a aggiungiSensore
 };
 
-#endif // CONTROLLER_H
+#endif // PRESENTER_H
