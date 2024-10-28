@@ -1,6 +1,10 @@
 import { Octokit } from "@octokit/core";
+import fetch from "node-fetch";  // Import node-fetch
 
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+const octokit = new Octokit({ 
+  auth: process.env.GITHUB_TOKEN,
+  request: { fetch }  // Set fetch implementation
+});
 
 async function closeCompletedIssues() {
   const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
