@@ -19,7 +19,7 @@ jobs:
           node-version: '16'  # Specify the Node.js version
 
       - name: Install dependencies
-        run: npm install @octokit/core
+        run: npm install @octokit/core node-fetch
 
       - name: Run Close Completed Issues Script
         env:
