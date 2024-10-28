@@ -1,7 +1,9 @@
 name: Close Completed Issues
 
 on:
-  workflow_dispatch:  # Permette di eseguirla manualmente
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+  workflow_dispatch:  # Allows manual run
 
 jobs:
   close_completed_issues:
@@ -9,7 +11,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Specify the Node.js version
+
+      - name: Install Octokit
+        run: npm install @octokit/core
 
       - name: Close issues with all tasks completed
         env:
