@@ -1,8 +1,6 @@
 name: Close Completed Issues
 
 on:
-  schedule:
-    - cron: '0 0 * * *'  # Esegui giornalmente a mezzanotte
   workflow_dispatch:  # Permette di eseguirla manualmente
 
 jobs:
@@ -11,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Close issues with all tasks completed
         env:
