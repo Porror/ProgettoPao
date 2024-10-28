@@ -1,0 +1,46 @@
+name: Close Completed Issues
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Esegui giornalmente a mezzanotte
+  workflow_dispatch:  # Permette di eseguirla manualmente
+
+jobs:
+  close_completed_issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Close issues with all tasks completed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node <<EOF
+          const { Octokit } = require("@octokit/core");
+          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
+          async function closeCompletedIssues() {
+            const { data: issues } = await octokit.request('GET /repos/${{ github.repository }}/issues', {
+              state: 'open'
+            });
+
+            for (const issue of issues) {
+              const body = issue.body || "";
+              const tasks = body.match(/- \[([ xX])\]/g) || [];
+
+              const allTasksCompleted = tasks.length > 0 && tasks.every(task => task.includes('[x]') || task.includes('[X]'));
+
+              if (allTasksCompleted) {
+                await octokit.request('PATCH /repos/${{ github.repository }}/issues/{issue_number}', {
+                  issue_number: issue.number,
+                  state: 'closed'
+                });
+                console.log(`Closed issue #${issue.number} - "${issue.title}"`);
+              }
+            }
+          }
+
+          closeCompletedIssues().catch(error => console.error(error));
+          EOF
